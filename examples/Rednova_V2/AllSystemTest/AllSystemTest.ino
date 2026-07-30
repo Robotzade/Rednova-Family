@@ -1,4 +1,4 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 // --------------------------------------------------
 // All Function Test Program
@@ -12,9 +12,9 @@
 
 void setup() {
   Serial.begin(9600);
-  RednovaV2_1.begin();        // Initialize pin assignments
-  RednovaV2_1.PlayStartup();  // Play startup buzzer + RGB effect
-  //RednovaV2_1.StartMelody(); // Optional startup melody
+  Rednova.begin();        // Initialize pin assignments
+  Rednova.PlayStartup();  // Play startup buzzer + RGB effect
+  //Rednova.StartMelody(); // Optional startup melody
 }
 
 void loop() {
@@ -22,13 +22,13 @@ void loop() {
   // --------------------------------------------------
   // Read inputs
   // --------------------------------------------------
-  RednovaV2_1.ReadSwitch();   // Read DIP switch state
-  RednovaV2_1.ReadButton();   // Read button state
-  RednovaV2_1.ReadTrimpot();  // Read trimpot value
+  Rednova.ReadSwitch();   // Read DIP switch state
+  Rednova.ReadButton();   // Read button state
+  Rednova.ReadTrimpot();  // Read trimpot value
 
-  String sw = RednovaV2_1.SwitchState;
-  int button = RednovaV2_1.ButtonState;
-  int pot = RednovaV2_1.TrimpotState;
+  String sw = Rednova.SwitchState;
+  int button = Rednova.ButtonState;
+  int pot = Rednova.TrimpotState;
 
   // Print input states to serial monitor
   Serial.print("SW:");
@@ -46,15 +46,15 @@ void loop() {
   if (sw == "0000") {
     // LED color depending on trimpot value
     if (pot < 500) {
-      RednovaV2_1.ColorFunction(100, 0, 0);  // Red
+      Rednova.ColorFunction(100, 0, 0);  // Red
     } else {
-      RednovaV2_1.ColorFunction(0, 0, 100);  // Blue
+      Rednova.ColorFunction(0, 0, 100);  // Blue
     }
     // --------------------------------------------------
     // PLAY MELODY ONLY WHEN BUTTON IS PRESSED
     // --------------------------------------------------
     if (button == 1) {          // Button pressed
-      RednovaV2_1.PlayMario();  // Play Mario melody
+      Rednova.PlayMario();  // Play Mario melody
     }
   }
 
@@ -62,39 +62,39 @@ void loop() {
   // 1000 → FORWARD MOTOR TEST
   // --------------------------------------------------
   else if (sw == "1000") {
-    RednovaV2_1.ColorFunction(100, 0, 100);  // Magenta
-    RednovaV2_1.DualDirection(100, 100, 1);  // Forward
+    Rednova.ColorFunction(100, 0, 100);  // Magenta
+    Rednova.DualDirection(100, 100, 1);  // Forward
   }
 
   // --------------------------------------------------
   // 0100 → LEFT TURN TEST
   // --------------------------------------------------
   else if (sw == "0100") {
-    RednovaV2_1.ColorFunction(100, 100, 0);   // Yellow
-    RednovaV2_1.DualDirection(-100, 100, 1);  // Turn left
+    Rednova.ColorFunction(100, 100, 0);   // Yellow
+    Rednova.DualDirection(-100, 100, 1);  // Turn left
   }
 
   // --------------------------------------------------
   // 0010 → RIGHT TURN TEST
   // --------------------------------------------------
   else if (sw == "0010") {
-    RednovaV2_1.ColorFunction(0, 100, 100);   // Cyan
-    RednovaV2_1.DualDirection(100, -100, 1);  // Turn right
+    Rednova.ColorFunction(0, 100, 100);   // Cyan
+    Rednova.DualDirection(100, -100, 1);  // Turn right
   }
 
   // --------------------------------------------------
   // 0001 → BACKWARD MOTOR TEST
   // --------------------------------------------------
   else if (sw == "0001") {
-    RednovaV2_1.ColorFunction(100, 100, 100);  // White
-    RednovaV2_1.DualDirection(-100, -100, 1);  // Backward
+    Rednova.ColorFunction(100, 100, 100);  // White
+    Rednova.DualDirection(-100, -100, 1);  // Backward
   }
 
   // --------------------------------------------------
   // OTHER (DEFAULT) → LED OFF, MOTORS STOP
   // --------------------------------------------------
   else {
-    RednovaV2_1.ColorFunction(0, 0, 0);  // LED off
-    RednovaV2_1.DualDirection(0, 0, 1);  // Motors stop
+    Rednova.ColorFunction(0, 0, 0);  // LED off
+    Rednova.DualDirection(0, 0, 1);  // Motors stop
   }
 }

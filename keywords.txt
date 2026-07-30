@@ -1,11 +1,11 @@
 ########################################
-# Syntax Coloring Map For RednovaV2_1
+# Syntax Coloring Map For Rednova
 ########################################
 
 ########################################
 # Datatypes (KEYWORD1)
 ########################################
-RednovaV2_1Class    KEYWORD1
+RednovaClass    KEYWORD1
 
 ########################################
 # Methods and Functions (KEYWORD2)
@@ -29,7 +29,7 @@ BoardName	KEYWORD2
 ########################################
 # Special Functions (KEYWORD3)
 ########################################
-RednovaV2_1           KEYWORD3
+Rednova           KEYWORD3
 
 ########################################
 # Constants, Variables (LITERAL1)

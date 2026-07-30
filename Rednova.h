@@ -1,5 +1,5 @@
-#ifndef RednovaV2_1_h // kutuphane ismimiz Rednova
-#define RednovaV2_1_h
+#ifndef Rednova_h // kutuphane ismimiz Rednova
+#define Rednova_h
 
 #include <Arduino.h>
 
@@ -9,9 +9,9 @@ enum RednovaBoardType {
   REDNOVA_MICRO
 };
 
-class RednovaV2_1Class{ 
+class RednovaClass{ 
   public: 
-    RednovaV2_1Class(); 
+    RednovaClass(); 
     void SETUP(); 
 
 void DualDirection(float Lval, float Rval, int Time);    
@@ -38,6 +38,6 @@ const __FlashStringHelper* BoardName() const;
 };
 
 
-extern RednovaV2_1Class RednovaV2_1;
+extern RednovaClass Rednova;
 
 #endif

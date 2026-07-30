@@ -1,4 +1,4 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 // --------------------------------------------------
 // Continuous Buzzer Test
@@ -9,16 +9,16 @@
 
 void setup() {
   Serial.begin(9600);        // Start serial communication
-  RednovaV2_1.begin();       // Initialize Rednova board pins
-  RednovaV2_1.PlayStartup(); // Optional: play startup buzzer + LED effect
+  Rednova.begin();       // Initialize Rednova board pins
+  Rednova.PlayStartup(); // Optional: play startup buzzer + LED effect
 }
 
 void loop() {
   // Play buzzer for 1000ms
-  RednovaV2_1.Buzzer(1, 1000); 
+  Rednova.Buzzer(1, 1000); 
   Serial.println("Buzzer is ON for 1000ms");
   
   // Play buzzer for 1000ms
-  RednovaV2_1.Buzzer(0, 1000); 
+  Rednova.Buzzer(0, 1000); 
   Serial.println("Buzzer is OFF for 1000ms");
 }

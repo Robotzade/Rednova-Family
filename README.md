@@ -41,4 +41,4 @@ must use USB identifiers assigned to Robotzade/Rednova.
 - `hardware/rednova/avr`: local-development board platform
 - `examples`: examples grouped by board
 - `dist/package_rednova_index.json`: Boards Manager index source
-- `RednovaV2_1.*`: current shared library implementation
+- `Rednova.*`: current shared library implementation

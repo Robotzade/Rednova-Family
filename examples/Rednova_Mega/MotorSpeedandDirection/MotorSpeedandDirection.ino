@@ -1,4 +1,4 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 // --------------------------------------------------
 // Motor Control Test Program
@@ -12,37 +12,37 @@ bool lastButtonState = 0;      // For detecting button press change
 
 void setup() {
   Serial.begin(9600);
-  RednovaV2_1.begin();        // Initialize pins
-  RednovaV2_1.PlayStartup();  // Startup buzzer + LED effect
+  Rednova.begin();        // Initialize pins
+  Rednova.PlayStartup();  // Startup buzzer + LED effect
 }
 
 void loop() {
   // Read inputs
-  RednovaV2_1.ReadButton();    // Read button state
-  RednovaV2_1.ReadTrimpot();   // Read speed control trimpot
+  Rednova.ReadButton();    // Read button state
+  Rednova.ReadTrimpot();   // Read speed control trimpot
 
-  int speed = map(RednovaV2_1.TrimpotState, 0, 1023, 0, 100); // Map trimpot to 0-100%
+  int speed = map(Rednova.TrimpotState, 0, 1023, 0, 100); // Map trimpot to 0-100%
 
   // Detect button press (toggle on rising edge)
-  if (RednovaV2_1.ButtonState == 1 && lastButtonState == 0) {
+  if (Rednova.ButtonState == 1 && lastButtonState == 0) {
     motorReverse = !motorReverse; // Change motor direction
   }
-  lastButtonState = RednovaV2_1.ButtonState;
+  lastButtonState = Rednova.ButtonState;
 
   // Motor directions based on current toggle state
   float leftMotor = motorReverse ? -speed : speed;
   float rightMotor = motorReverse ? -speed : speed;
 
   // Apply motor values
-  RednovaV2_1.DualDirection(leftMotor, rightMotor, 100);
+  Rednova.DualDirection(leftMotor, rightMotor, 100);
 
   // LED feedback
-  if(RednovaV2_1.ButtonState == 1) {
-    RednovaV2_1.ColorFunction(100, 100, 100); // White  when button pressed
+  if(Rednova.ButtonState == 1) {
+    Rednova.ColorFunction(100, 100, 100); // White  when button pressed
   } else {
     // Normal motor direction LED
-    if(motorReverse) RednovaV2_1.ColorFunction(200, 70, 0); // Orange-ish = reverse
-    else             RednovaV2_1.ColorFunction(0, 70, 0); // Green = forward
+    if(motorReverse) Rednova.ColorFunction(200, 70, 0); // Orange-ish = reverse
+    else             Rednova.ColorFunction(0, 70, 0); // Green = forward
   }
 
   // Serial feedback

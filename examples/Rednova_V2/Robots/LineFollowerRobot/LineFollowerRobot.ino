@@ -1,4 +1,4 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 /* 
   Rednova V2 White Line Following Robot with PID
@@ -21,9 +21,9 @@ float lastError = 0;
 float integral = 0;
 
 void setup() {
-  RednovaV2_1.begin();
+  Rednova.begin();
   Serial.begin(9600);
-  RednovaV2_1.PlayStartup();
+  Rednova.PlayStartup();
 
   for (int i = 0; i < sensorsCount; i++) {
     pinMode(sensorPins[i], INPUT);
@@ -35,8 +35,8 @@ void setup() {
   delay(500);
 
   // Butona basılmasını bekle ve 5 bip
-  while (RednovaV2_1.ButtonState == 0) {
-    RednovaV2_1.ReadButton();
+  while (Rednova.ButtonState == 0) {
+    Rednova.ReadButton();
   }
   beepStart(5);  // 5 beeps
 }
@@ -77,7 +77,7 @@ void loop() {
   leftSpeed = constrain(leftSpeed, -120, 120);
   rightSpeed = constrain(rightSpeed, -120, 120);
 
-  RednovaV2_1.DualDirection(leftSpeed, rightSpeed, 1);
+  Rednova.DualDirection(leftSpeed, rightSpeed, 1);
 
 }
 
@@ -99,7 +99,7 @@ void calibrateSensors() {
 // ----- Beep Function -----
 void beepStart(int count) {
   for (int i = 0; i < count; i++) {
-    RednovaV2_1.Buzzer(1, 200);  // 200ms beep
-    RednovaV2_1.Buzzer(0, 200);  // 200ms beep
+    Rednova.Buzzer(1, 200);  // 200ms beep
+    Rednova.Buzzer(0, 200);  // 200ms beep
   }
 }

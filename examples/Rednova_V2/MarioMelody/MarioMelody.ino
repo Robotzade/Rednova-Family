@@ -1,4 +1,4 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 // --------------------------------------------------
 // Continuous Mario Melody Test
@@ -7,11 +7,11 @@
 
 void setup() {
   Serial.begin(9600);
-  RednovaV2_1.begin();        // Initialize pins
-  RednovaV2_1.PlayStartup();  // Optional startup buzzer + LED effect
+  Rednova.begin();        // Initialize pins
+  Rednova.PlayStartup();  // Optional startup buzzer + LED effect
 }
 
 void loop() {
-  RednovaV2_1.PlayMario();    // Play Mario melody
+  Rednova.PlayMario();    // Play Mario melody
   delay(500);                  // Short pause between repetitions
 }

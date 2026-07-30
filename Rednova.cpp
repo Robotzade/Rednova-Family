@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "RednovaV2_1.h"
+#include "Rednova.h"
 
 #define M2_Pwm 10
 #define M2_Dir 5
@@ -106,17 +106,17 @@ int melody[] = { NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C
 // note durations: 4 = quarter note, 8 = eighth note, etc.:
 int noteDurations[] = { 4, 8, 8, 4, 4, 4, 4, 4 };
 
-String RednovaV2_1ReadString;
+String RednovaReadString;
 
-RednovaV2_1Class::RednovaV2_1Class()
+RednovaClass::RednovaClass()
     : TrimpotState(0), ButtonState(0), SwitchState("0000") {
 }
 
-void RednovaV2_1Class::SETUP(){
+void RednovaClass::SETUP(){
     begin();
 }
 
-void RednovaV2_1Class::begin() {
+void RednovaClass::begin() {
     LED_DDR |= (1 << LED_BIT);
     LED_PORT &= ~(1 << LED_BIT);
     pinMode(BZR ,OUTPUT);
@@ -134,7 +134,7 @@ void RednovaV2_1Class::begin() {
     pinMode(TRIMPOT_PIN, INPUT);
 }
 
-void RednovaV2_1Class::Buzzer(boolean x , int Time ){
+void RednovaClass::Buzzer(boolean x , int Time ){
     if (x == 1) {
         tone(13, NOTE_A3);
         delay(Time);
@@ -144,7 +144,7 @@ void RednovaV2_1Class::Buzzer(boolean x , int Time ){
     }
 }
 
-void RednovaV2_1Class::ReadSwitch() {
+void RednovaClass::ReadSwitch() {
     char s[5]; // 4 karakter + null terminator
     s[0] = (digitalRead(15) == LOW) ? '1' : '0'; // Bit0
     s[1] = (digitalRead(16) == LOW) ? '1' : '0'; // Bit1
@@ -154,16 +154,16 @@ void RednovaV2_1Class::ReadSwitch() {
     SwitchState = String(s);
 }
 
-void RednovaV2_1Class::ReadButton() {
+void RednovaClass::ReadButton() {
     if (digitalRead(BUTTON_PIN) == LOW) ButtonState = 1; // Basılı
     else ButtonState = 0; // Basılı değil
 }
 
-void RednovaV2_1Class::ReadTrimpot() {
+void RednovaClass::ReadTrimpot() {
     TrimpotState = analogRead(TRIMPOT_PIN);
 }
 
-void RednovaV2_1Class::StartMelody(){
+void RednovaClass::StartMelody(){
     delay(300);
     for (int thisNote = 0; thisNote < 8; thisNote++) {
         int noteDuration = 1000 / noteDurations[thisNote];
@@ -174,7 +174,7 @@ void RednovaV2_1Class::StartMelody(){
     }
 }
 
-void RednovaV2_1Class::DualDirection(float Lval, float Rval, int Time){
+void RednovaClass::DualDirection(float Lval, float Rval, int Time){
     WriteMotor(M1_Pwm, M1_Dir, Lval);
     WriteMotor(M2_Pwm, M2_Dir, Rval);
     if (Time > 0) {
@@ -182,7 +182,7 @@ void RednovaV2_1Class::DualDirection(float Lval, float Rval, int Time){
     }
 }
 
-void RednovaV2_1Class::WriteMotor(uint8_t pwmPin, uint8_t directionPin, float value) {
+void RednovaClass::WriteMotor(uint8_t pwmPin, uint8_t directionPin, float value) {
     value = constrain(value, -100.0f, 100.0f);
     bool forward = value >= 0.0f;
     int pwm = (int)(abs(value) * 2.55f + 0.5f);
@@ -199,7 +199,7 @@ void RednovaV2_1Class::WriteMotor(uint8_t pwmPin, uint8_t directionPin, float va
     analogWrite(pwmPin, pwm);
 }
 
-RednovaBoardType RednovaV2_1Class::BoardType() const {
+RednovaBoardType RednovaClass::BoardType() const {
 #if defined(REDNOVA_BOARD_MEGA)
     return REDNOVA_MEGA;
 #elif defined(REDNOVA_BOARD_MICRO)
@@ -209,7 +209,7 @@ RednovaBoardType RednovaV2_1Class::BoardType() const {
 #endif
 }
 
-const __FlashStringHelper* RednovaV2_1Class::BoardName() const {
+const __FlashStringHelper* RednovaClass::BoardName() const {
 #if defined(REDNOVA_BOARD_MEGA)
     return F("Rednova Mega");
 #elif defined(REDNOVA_BOARD_MICRO)
@@ -243,7 +243,7 @@ void sendByte(uint8_t byte) {
     }
 }
 
-void RednovaV2_1Class::ColorFunction(uint8_t r, uint8_t g, uint8_t b) {
+void RednovaClass::ColorFunction(uint8_t r, uint8_t g, uint8_t b) {
     // --- Maksimum parlaklık limiti (100) ---
     if (r > 100) r = 100;
     if (g > 100) g = 100;
@@ -270,7 +270,7 @@ void RednovaV2_1Class::ColorFunction(uint8_t r, uint8_t g, uint8_t b) {
     delayMicroseconds(50);
 }
 
-void RednovaV2_1Class::PlayStartup() {
+void RednovaClass::PlayStartup() {
     // --- Small delay before starting ---
     delay(300);
 
@@ -311,7 +311,7 @@ void RednovaV2_1Class::PlayStartup() {
     interrupts();
 delay(100);
 }
-void RednovaV2_1Class::Jump() {
+void RednovaClass::Jump() {
     // --- Define pitches ---
     int jumpMelody[][2] = {
         {1047, 150}, // NOTE_C6 - Jump
@@ -327,7 +327,7 @@ void RednovaV2_1Class::Jump() {
 }
 
 
-void RednovaV2_1Class::PlayMario() {
+void RednovaClass::PlayMario() {
     int marioMelody[] = {
         NOTE_E7, NOTE_E7, 0, NOTE_E7,
         0, NOTE_C7, NOTE_E7, 0,
@@ -365,7 +365,7 @@ void RednovaV2_1Class::PlayMario() {
     }
 }
 
-void RednovaV2_1Class::MixLed(){
+void RednovaClass::MixLed(){
     float scale = 1.25; // Parlaklık artırıcı katsayı
   
         for (int i = 0; i < 255; i++) {
@@ -384,4 +384,4 @@ void RednovaV2_1Class::MixLed(){
 }
 
 
-RednovaV2_1Class RednovaV2_1;
+RednovaClass Rednova;

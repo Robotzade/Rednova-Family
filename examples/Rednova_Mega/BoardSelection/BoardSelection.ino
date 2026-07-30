@@ -1,14 +1,14 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 void setup() {
   Serial.begin(9600);
-  RednovaV2_1.begin();
+  Rednova.begin();
 
   while (!Serial && millis() < 3000) {
   }
 
   Serial.print(F("Selected board: "));
-  Serial.println(RednovaV2_1.BoardName());
+  Serial.println(Rednova.BoardName());
 }
 
 void loop() {

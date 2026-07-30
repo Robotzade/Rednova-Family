@@ -1,4 +1,4 @@
-#include <RednovaV2_1.h>
+#include <Rednova.h>
 
 // --------------------------------------------------
 // Input Monitor Test Program
@@ -8,20 +8,20 @@
 
 void setup() {
   Serial.begin(9600);
-  RednovaV2_1.begin();       // Initialize pins
-  RednovaV2_1.PlayStartup(); // Optional startup effect
+  Rednova.begin();       // Initialize pins
+  Rednova.PlayStartup(); // Optional startup effect
 }
 
 void loop() {
   // Read inputs
-  RednovaV2_1.ReadSwitch();   // Read DIP switch state
-  RednovaV2_1.ReadButton();   // Read button state
-  RednovaV2_1.ReadTrimpot();  // Read trimpot value
+  Rednova.ReadSwitch();   // Read DIP switch state
+  Rednova.ReadButton();   // Read button state
+  Rednova.ReadTrimpot();  // Read trimpot value
 
   // Get values
-  String switchState = RednovaV2_1.SwitchState;
-  int buttonState = RednovaV2_1.ButtonState;
-  int trimpotValue = RednovaV2_1.TrimpotState;
+  String switchState = Rednova.SwitchState;
+  int buttonState = Rednova.ButtonState;
+  int trimpotValue = Rednova.TrimpotState;
 
   // Print to Serial Monitor
   Serial.print("Switches: ");
