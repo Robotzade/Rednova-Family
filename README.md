@@ -20,6 +20,9 @@ https://raw.githubusercontent.com/robotzade/Rednova-Family/main/package_rednova_
 
 Then open **Boards Manager**, search for **Rednova AVR Boards**, and install the
 package. The Rednova library and examples are bundled with the board package.
+Arduino IDE shows one shared **Rednova** example list. The examples compile
+according to the selected Rednova V2, Mega, or Micro board, so duplicate model
+folders are not shown.
 Custom manufacturing bootloaders are intentionally excluded from the public
 repository and Boards Manager archive.
 
@@ -47,6 +50,6 @@ and is not covered by this USB upload check.
 ## Repository layout
 
 - `hardware/rednova/avr`: local-development board platform
-- `examples`: examples grouped by board
+- `examples/Rednova`: shared examples that follow the selected board model
 - `dist/package_rednova_index.json`: Boards Manager index source
 - `Rednova.*`: current shared library implementation
