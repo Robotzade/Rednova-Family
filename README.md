@@ -36,6 +36,14 @@ The development build uses pid.codes test identifiers:
 These identifiers are only for development and testing. Production hardware
 must use USB identifiers assigned to Robotzade/Rednova.
 
+## Model-safe uploads
+
+On Windows, the uploader verifies the physical board's bootloader VID/PID
+before writing flash. Selecting Mega or Micro while a V2 is connected (and the
+equivalent mismatches for the other models) stops the upload before `avrdude`
+can modify the application. ISP programming remains a factory-only operation
+and is not covered by this USB upload check.
+
 ## Repository layout
 
 - `hardware/rednova/avr`: local-development board platform

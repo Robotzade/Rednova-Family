@@ -3,8 +3,8 @@
 ##############################################################
 
 rednova_v2.name=Rednova V2
-rednova_v2.upload.tool=avrdude
-rednova_v2.upload.tool.default=avrdude
+rednova_v2.upload.tool=rednova_avrdude
+rednova_v2.upload.tool.default=rednova_avrdude
 rednova_v2.upload.protocol=avr109
 rednova_v2.upload.maximum_size=28672
 rednova_v2.upload.maximum_data_size=2560
@@ -12,6 +12,8 @@ rednova_v2.upload.speed=57600
 rednova_v2.upload.disable_flushing=true
 rednova_v2.upload.use_1200bps_touch=true
 rednova_v2.upload.wait_for_upload_port=true
+rednova_v2.upload.expected_pid=0001
+rednova_v2.upload.expected_board="Rednova V2"
 rednova_v2.build.mcu=atmega32u4
 rednova_v2.build.f_cpu=16000000L
 rednova_v2.build.vid=0x1209
@@ -29,8 +31,8 @@ rednova_v2.upload_port.1.pid=0x0002
 ##############################################################
 
 rednova_mega.name=Rednova Mega
-rednova_mega.upload.tool=avrdude
-rednova_mega.upload.tool.default=avrdude
+rednova_mega.upload.tool=rednova_avrdude
+rednova_mega.upload.tool.default=rednova_avrdude
 rednova_mega.upload.protocol=avr109
 rednova_mega.upload.maximum_size=28672
 rednova_mega.upload.maximum_data_size=2560
@@ -38,6 +40,8 @@ rednova_mega.upload.speed=57600
 rednova_mega.upload.disable_flushing=true
 rednova_mega.upload.use_1200bps_touch=true
 rednova_mega.upload.wait_for_upload_port=true
+rednova_mega.upload.expected_pid=0003
+rednova_mega.upload.expected_board="Rednova Mega"
 rednova_mega.build.mcu=atmega32u4
 rednova_mega.build.f_cpu=16000000L
 rednova_mega.build.vid=0x1209
@@ -55,8 +59,8 @@ rednova_mega.upload_port.1.pid=0x0004
 ##############################################################
 
 rednova_micro.name=Rednova Micro
-rednova_micro.upload.tool=avrdude
-rednova_micro.upload.tool.default=avrdude
+rednova_micro.upload.tool=rednova_avrdude
+rednova_micro.upload.tool.default=rednova_avrdude
 rednova_micro.upload.protocol=avr109
 rednova_micro.upload.maximum_size=28672
 rednova_micro.upload.maximum_data_size=2560
@@ -64,6 +68,8 @@ rednova_micro.upload.speed=57600
 rednova_micro.upload.disable_flushing=true
 rednova_micro.upload.use_1200bps_touch=true
 rednova_micro.upload.wait_for_upload_port=true
+rednova_micro.upload.expected_pid=0005
+rednova_micro.upload.expected_board="Rednova Micro"
 rednova_micro.build.mcu=atmega32u4
 rednova_micro.build.f_cpu=16000000L
 rednova_micro.build.vid=0x1209

@@ -6,7 +6,7 @@
 # https://arduino.github.io/arduino-cli/latest/platform-specification/
 
 name=Rednova AVR Boards
-version=1.0.1
+version=1.0.2
 
 # AVR compile variables
 # ---------------------
@@ -108,6 +108,20 @@ tools.avrdude.upload.params.quiet=-q -q
 tools.avrdude.upload.verify=
 tools.avrdude.upload.params.noverify=-V
 tools.avrdude.upload.pattern="{cmd.path}" "-C{config.path}" {upload.verbose} {upload.verify} -p{build.mcu} -c{upload.protocol} "-P{serial.port}" -b{upload.speed} -D "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+
+# Rednova model-safe uploader
+# Windows validates the bootloader VID/PID before avrdude is allowed to write.
+# Other operating systems retain the standard uploader until equivalent checks
+# are provided for their native USB discovery systems.
+tools.rednova_avrdude.path={runtime.tools.avrdude.path}
+tools.rednova_avrdude.cmd.path={path}/bin/avrdude
+tools.rednova_avrdude.config.path={path}/etc/avrdude.conf
+tools.rednova_avrdude.upload.params.verbose=-v
+tools.rednova_avrdude.upload.params.quiet=-q -q
+tools.rednova_avrdude.upload.verify=
+tools.rednova_avrdude.upload.params.noverify=-V
+tools.rednova_avrdude.upload.pattern="{cmd.path}" "-C{config.path}" {upload.verbose} {upload.verify} -p{build.mcu} -c{upload.protocol} "-P{serial.port}" -b{upload.speed} -D "-Uflash:w:{build.path}/{build.project_name}.hex:i"
+tools.rednova_avrdude.upload.pattern.windows=powershell.exe -NoProfile -ExecutionPolicy Bypass -File "{runtime.platform.path}/tools/rednova-upload.ps1" -ExpectedPid "{upload.expected_pid}" -ExpectedBoard "{upload.expected_board}" -Port "{serial.port}" -Avrdude "{cmd.path}" -Config "{config.path}" -Mcu "{build.mcu}" -Protocol "{upload.protocol}" -Speed "{upload.speed}" -HexFile "{build.path}/{build.project_name}.hex" -UploadVerbose "{upload.verbose}" -UploadVerify "{upload.verify}"
 
 tools.avrdude.program.params.verbose=-v
 tools.avrdude.program.params.quiet=-q -q

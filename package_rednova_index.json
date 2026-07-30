@@ -12,12 +12,12 @@
         {
           "name": "Rednova AVR Boards",
           "architecture": "avr",
-          "version": "1.0.1",
+          "version": "1.0.2",
           "category": "Contributed",
-          "url": "https://github.com/robotzade/Rednova-Family/releases/download/v1.0.1/rednova-avr-1.0.1.zip",
-          "archiveFileName": "rednova-avr-1.0.1.zip",
-          "checksum": "SHA-256:846941ad571ff666d21bd0d6a3459748495cdc441b0cd29bbe31c9fc40903380",
-          "size": "8538713",
+          "url": "https://github.com/robotzade/Rednova-Family/releases/download/v1.0.2/rednova-avr-1.0.2.zip",
+          "archiveFileName": "rednova-avr-1.0.2.zip",
+          "checksum": "SHA-256:6d50db9e208a7e8726f6ef593391924a58e5bbe86f0d4a5c9ec44910dd99ddca",
+          "size": "8540244",
           "help": {
             "online": "https://www.robotzade.com/"
           },
