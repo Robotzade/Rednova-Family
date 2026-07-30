@@ -1,0 +1,42 @@
+########################################
+# Syntax Coloring Map For RednovaV2_1
+########################################
+
+########################################
+# Datatypes (KEYWORD1)
+########################################
+RednovaV2_1Class    KEYWORD1
+
+########################################
+# Methods and Functions (KEYWORD2)
+########################################
+SETUP                 KEYWORD2
+DualDirection         KEYWORD2
+Buzzer                KEYWORD2
+StartMelody           KEYWORD2
+PlayStartup           KEYWORD2
+MixLed                KEYWORD2
+begin                 KEYWORD2
+ReadButton            KEYWORD2
+ReadTrimpot           KEYWORD2
+ColorFunction         KEYWORD2
+ReadSwitch            KEYWORD2
+PlayMario	KEYWORD2
+Jump            KEYWORD2
+BoardType	KEYWORD2
+BoardName	KEYWORD2
+
+########################################
+# Special Functions (KEYWORD3)
+########################################
+RednovaV2_1           KEYWORD3
+
+########################################
+# Constants, Variables (LITERAL1)
+########################################
+TrimpotState          LITERAL1
+ButtonState           LITERAL1
+SwitchState           LITERAL1
+REDNOVA_V2             LITERAL1
+REDNOVA_MEGA           LITERAL1
+REDNOVA_MICRO          LITERAL1

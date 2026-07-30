@@ -1,0 +1,17 @@
+# Generated release staging and downloaded references
+dist/staging/
+dist/package_index_arduino_reference.json
+ArduinoCore-avr-master.zip
+
+# Release archives are uploaded to GitHub Releases
+dist/*.zip
+
+# Private manufacturing files (never publish)
+local-manufacturing/
+
+# Local editor and build output
+.vscode/
+.idea/
+build/
+*.tmp
+*.log
