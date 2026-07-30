@@ -13,6 +13,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$UploadVerbose = $UploadVerbose.Substring(1)
+$UploadVerify = $UploadVerify.Substring(1)
 $expectedHardwareId = "VID_1209&PID_$($ExpectedPid.ToUpperInvariant())"
 $serialDevice = $null
 
