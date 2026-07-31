@@ -1,4 +1,5 @@
 #include <EEPROM.h>
+#include <avr/pgmspace.h>
 
 // Factory/service tool: permanently identifies the connected ATmega32U4
 // controller as Rednova Micro. Upload with Tools > Board > Arduino Leonardo.
@@ -12,24 +13,22 @@ const byte MICRO_IDENTITY[8] = {
   0x46,                    // Flexible Leonardo policy
   0xA5                     // Identity terminator
 };
-const byte LOCKED_V2_IDENTITY[8] = {0x52, 0x44, 0x4E, 0x56, 0x02, 0x02, 0x4C, 0xA5};
-const byte LOCKED_MICRO_IDENTITY[8] = {0x52, 0x44, 0x4E, 0x56, 0x02, 0x03, 0x4C, 0xA5};
-const byte FLEXIBLE_V2_IDENTITY[8] = {0x52, 0x44, 0x4E, 0x56, 0x02, 0x02, 0x46, 0xA5};
-const byte LEGACY_V2_IDENTITY[8] = {0x52, 0x44, 0x4E, 0x56, 0x01, 0x02, 0xFD, 0xA5};
-const byte LEGACY_MICRO_IDENTITY[8] = {0x52, 0x44, 0x4E, 0x56, 0x01, 0x03, 0xFC, 0xA5};
+enum BootloaderModel { BOOT_UNKNOWN, BOOT_LEONARDO, BOOT_V2, BOOT_MICRO };
+
+BootloaderModel detectBootloaderModel() {
+  const byte marker0 = pgm_read_byte_far(0x7F4F);
+  const byte marker1 = pgm_read_byte_far(0x7F50);
+  const byte marker2 = pgm_read_byte_far(0x7F51);
+
+  if (marker0 == 0x41 && marker1 == 0x23 && marker2 == 0x36) return BOOT_LEONARDO;
+  if (marker0 == 0x09 && marker1 == 0x12 && marker2 == 0x01) return BOOT_V2;
+  if (marker0 == 0x09 && marker1 == 0x12 && marker2 == 0x03) return BOOT_MICRO;
+  return BOOT_UNKNOWN;
+}
 
 bool identityMatches() {
   for (byte index = 0; index < sizeof(MICRO_IDENTITY); index++) {
     if (EEPROM.read(IDENTITY_ADDRESS + index) != MICRO_IDENTITY[index]) {
-      return false;
-    }
-  }
-  return true;
-}
-
-bool storedIdentityMatches(const byte expected[8]) {
-  for (byte index = 0; index < 8; index++) {
-    if (EEPROM.read(IDENTITY_ADDRESS + index) != expected[index]) {
       return false;
     }
   }
@@ -41,23 +40,24 @@ void setup() {
   digitalWrite(LED_BUILTIN, LOW);
   Serial.begin(9600);
 
-  if (identityMatches() || storedIdentityMatches(LOCKED_MICRO_IDENTITY) || storedIdentityMatches(LEGACY_MICRO_IDENTITY)) {
+  const BootloaderModel bootloader = detectBootloaderModel();
+  if (bootloader == BOOT_MICRO) {
+    digitalWrite(LED_BUILTIN, HIGH);
+    Serial.println("Rednova Micro ICSP bootloader detected. Model is permanently locked to Micro.");
+    return;
+  }
+  if (bootloader == BOOT_V2) {
+    Serial.println("BLOCKED: Rednova V2 ICSP bootloader cannot be changed to Micro.");
+    return;
+  }
+  if (bootloader != BOOT_LEONARDO) {
+    Serial.println("BLOCKED: An authorized Leonardo bootloader was not detected.");
+    return;
+  }
+
+  if (identityMatches()) {
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.println("Rednova Micro identity is already assigned. No change was made.");
-    return;
-  }
-
-  if (storedIdentityMatches(LOCKED_V2_IDENTITY) || storedIdentityMatches(LEGACY_V2_IDENTITY)) {
-    Serial.println("BLOCKED: ICSP-provisioned Rednova V2 identity cannot be changed to Micro.");
-    return;
-  }
-
-  bool blank = true;
-  for (byte index = 0; index < 8; index++) {
-    if (EEPROM.read(IDENTITY_ADDRESS + index) != 0xFF) blank = false;
-  }
-  if (!blank && !storedIdentityMatches(FLEXIBLE_V2_IDENTITY)) {
-    Serial.println("BLOCKED: Unknown or protected identity data was found.");
     return;
   }
 
