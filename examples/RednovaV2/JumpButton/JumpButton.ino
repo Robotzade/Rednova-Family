@@ -1,5 +1,9 @@
 #include <Rednova.h>
 
+#if !defined(REDNOVA_BOARD_V2)
+#error "This example requires Tools > Board > Rednova Family > Rednova V2."
+#endif
+
 // --------------------------------------------------
 // Color Cycle with Jump Effect
 // --------------------------------------------------

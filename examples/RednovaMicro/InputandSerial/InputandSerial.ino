@@ -1,5 +1,9 @@
 #include <Rednova.h>
 
+#if !defined(REDNOVA_BOARD_MICRO)
+#error "This example requires Tools > Board > Rednova Family > Rednova Micro."
+#endif
+
 // --------------------------------------------------
 // Input Monitor Test Program
 // Reads the two DIP switches on D15 and D16, button, and trimpot

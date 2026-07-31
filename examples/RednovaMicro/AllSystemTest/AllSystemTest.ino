@@ -1,5 +1,9 @@
 #include <Rednova.h>
 
+#if !defined(REDNOVA_BOARD_MICRO)
+#error "This example requires Tools > Board > Rednova Family > Rednova Micro."
+#endif
+
 // Rednova Micro complete hardware test
 // SW1 is connected to D15 and SW2 is connected to D16.
 //

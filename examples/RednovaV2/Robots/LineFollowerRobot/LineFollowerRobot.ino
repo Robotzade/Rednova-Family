@@ -1,5 +1,9 @@
 #include <Rednova.h>
 
+#if !defined(REDNOVA_BOARD_V2)
+#error "This example requires Tools > Board > Rednova Family > Rednova V2."
+#endif
+
 /* 
   Rednova V2 White Line Following Robot with PID
   Hardware Overview:

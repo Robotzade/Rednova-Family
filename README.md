@@ -19,6 +19,8 @@ model-specific hardware behavior is validated.
 The bundled examples are organized into separate `RednovaV2` and
 `RednovaMicro` groups. The Windows uploader validates the selected Rednova
 model's application and bootloader USB identities before writing a sketch.
+Each example is also compile-locked to its matching Rednova board selection,
+so a Micro example cannot be built for V2 or a V2 example for Micro.
 
 ## Development status
 
