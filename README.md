@@ -1,55 +1,45 @@
 # Rednova Family
 
-Arduino board support and library for the Robotzade Rednova controller family:
+Rednova Family is an independent Robotzade controller platform compatible with
+the Arduino IDE.
+
+## Supported board
 
 - Rednova V2
-- Rednova Mega
-- Rednova Micro
 
-All three boards currently use the ATmega32U4 at 16 MHz and the Leonardo pin
-mapping. Card-specific motor driver behavior is isolated in the library and
-will be finalized after hardware testing.
+Rednova V2 uses an ATmega32U4 at 16 MHz and is compatible with the Arduino AVR
+core and Leonardo pin mapping.
 
-## Arduino IDE installation
+Rednova Mega and Rednova Micro will be added after the V2 platform is released
+and their model-specific hardware behavior is validated.
 
-Add this URL to **File > Preferences > Additional Boards Manager URLs**:
+## Development status
 
-```text
-https://raw.githubusercontent.com/robotzade/Rednova-Family/main/package_rednova_index.json
-```
+Rednova V2 has passed:
 
-Then open **Boards Manager**, search for **Rednova AVR Boards**, and install the
-package. The Rednova library and examples are bundled with the board package.
-Arduino IDE shows one shared **Rednova** example list. The examples compile
-according to the selected Rednova V2, Mega, or Micro board, so duplicate model
-folders are not shown.
-Custom manufacturing bootloaders are intentionally excluded from the public
-repository and Boards Manager archive.
+- Arduino IDE board discovery
+- Compile and sketch upload
+- USB serial communication
+- Button, DIP switch, and trimpot tests
+- Buzzer test
+- WS2812B RGB LED test
+- Motor speed and direction test
+- Complete system test
 
-## Board identification
+## Installation
 
-The development build uses pid.codes test identifiers:
+The release package is distributed through Arduino Boards Manager. During
+development it can also be installed in the Arduino sketchbook `hardware`
+directory.
 
-| Board | Bootloader | Sketch |
-| --- | --- | --- |
-| Rednova V2 | `1209:0001` | `1209:0002` |
-| Rednova Mega | `1209:0003` | `1209:0004` |
-| Rednova Micro | `1209:0005` | `1209:0006` |
+## Product wording
 
-These identifiers are only for development and testing. Production hardware
-must use USB identifiers assigned to Robotzade/Rednova.
+> Rednova Family - compatible with the Arduino IDE
 
-## Model-safe uploads
+Rednova and Robotzade are independent brands. Arduino trademarks and logos are
+not part of the Rednova product name or identity.
 
-On Windows, the uploader verifies the physical board's bootloader VID/PID
-before writing flash. Selecting Mega or Micro while a V2 is connected (and the
-equivalent mismatches for the other models) stops the upload before `avrdude`
-can modify the application. ISP programming remains a factory-only operation
-and is not covered by this USB upload check.
+## Private manufacturing files
 
-## Repository layout
-
-- `hardware/rednova/avr`: local-development board platform
-- `examples/Rednova`: shared examples that follow the selected board model
-- `dist/package_rednova_index.json`: Boards Manager index source
-- `Rednova.*`: current shared library implementation
+Model-specific factory bootloader files and manufacturing tools are excluded
+from the public repository and release archives.
