@@ -35,9 +35,11 @@ automatically. This first selection must match the physical product. Normal
 sketch uploads preserve the identity.
 
 The `BoardFactoryReset` example group contains separate V2 and Micro identity
-writers for authorized factory/service reassignment. These sketches are
-uploaded with the standard **Arduino Leonardo** selection, write and verify the
-permanent EEPROM identity, and intentionally override the previous model lock.
+writers for Leonardo-era controllers. EEPROM identities now include a policy:
+original Leonardo bootloaders receive a flexible identity that these tools may
+change, while ICSP-installed Rednova bootloaders receive a locked identity that
+cannot be converted to the other model. Version-1 identities are migrated by
+the uploader according to the bootloader USB identity it observes.
 
 ## Development status
 

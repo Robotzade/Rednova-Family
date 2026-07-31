@@ -6,6 +6,7 @@ param(
     [Parameter(Mandatory = $true)][string]$ExpectedBoard,
     [Parameter(Mandatory = $true)][ValidateSet("V2", "MICRO")][string]$ExpectedModel,
     [Parameter(Mandatory = $true)][string]$IdentityFile,
+    [Parameter(Mandatory = $true)][string]$FlexibleIdentityFile,
     [Parameter(Mandatory = $true)][string]$Port,
     [Parameter(Mandatory = $true)][string]$Avrdude,
     [Parameter(Mandatory = $true)][string]$Config,
@@ -25,9 +26,15 @@ $expectedBootHardwareId = "VID_$($ExpectedBootVid.ToUpperInvariant())&PID_$($Exp
 $legacyAppHardwareIds = @("VID_2341&PID_8036", "VID_2A03&PID_8036")
 $legacyBootHardwareIds = @("VID_2341&PID_0036", "VID_2A03&PID_0036")
 $identityOffset = 1016
-$identityV2 = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x01, 0x02, 0xFD, 0xA5)
-$identityMicro = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x01, 0x03, 0xFC, 0xA5)
-$expectedIdentity = if ($ExpectedModel -eq "V2") { $identityV2 } else { $identityMicro }
+$legacyIdentityV2 = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x01, 0x02, 0xFD, 0xA5)
+$legacyIdentityMicro = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x01, 0x03, 0xFC, 0xA5)
+$lockedIdentityV2 = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x02, 0x02, 0x4C, 0xA5)
+$lockedIdentityMicro = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x02, 0x03, 0x4C, 0xA5)
+$flexibleIdentityV2 = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x02, 0x02, 0x46, 0xA5)
+$flexibleIdentityMicro = [byte[]](0x52, 0x44, 0x4E, 0x56, 0x02, 0x03, 0x46, 0xA5)
+$expectedLegacyIdentity = if ($ExpectedModel -eq "V2") { $legacyIdentityV2 } else { $legacyIdentityMicro }
+$expectedLockedIdentity = if ($ExpectedModel -eq "V2") { $lockedIdentityV2 } else { $lockedIdentityMicro }
+$expectedFlexibleIdentity = if ($ExpectedModel -eq "V2") { $flexibleIdentityV2 } else { $flexibleIdentityMicro }
 $otherModel = if ($ExpectedModel -eq "V2") { "Rednova Micro" } else { "Rednova V2" }
 
 function Test-HardwareId([string]$PnpDeviceId, [string[]]$HardwareIds) {
@@ -107,13 +114,17 @@ if ($isApplication) {
         exit 23
     }
     $uploadPort = $bootDevice.DeviceID
+} else {
+    $bootDevice = $serialDevice
 }
+$usingLegacyBootloader = Test-HardwareId $bootDevice.PNPDeviceID $legacyBootHardwareIds
 
 # The USB product string belongs to the currently running sketch and can be
 # changed by an Arduino Leonardo upload. The EEPROM identity is independent of
 # that sketch, so it is the authoritative physical-model lock.
 $eepromDump = Join-Path ([System.IO.Path]::GetTempPath()) ("rednova-eeprom-" + [guid]::NewGuid().ToString("N") + ".bin")
 $needsIdentityWrite = $false
+$identityFileForWrite = $IdentityFile
 try {
     & $Avrdude "-C$Config" "-p$Mcu" "-c$Protocol" "-P$uploadPort" "-b$Speed" "-Ueeprom:r:$($eepromDump):r"
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $eepromDump)) {
@@ -129,6 +140,12 @@ try {
 
     $actualIdentity = [byte[]]$eeprom[$identityOffset..($identityOffset + 7)]
     $blankIdentity = Test-ByteArray $actualIdentity ([byte[]](0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF))
+
+    $matchesExpectedLocked = Test-ByteArray $actualIdentity $expectedLockedIdentity
+    $matchesExpectedFlexible = Test-ByteArray $actualIdentity $expectedFlexibleIdentity
+    $matchesExpectedLegacy = Test-ByteArray $actualIdentity $expectedLegacyIdentity
+    $recognizedV2 = (Test-ByteArray $actualIdentity $legacyIdentityV2) -or (Test-ByteArray $actualIdentity $lockedIdentityV2) -or (Test-ByteArray $actualIdentity $flexibleIdentityV2)
+    $recognizedMicro = (Test-ByteArray $actualIdentity $legacyIdentityMicro) -or (Test-ByteArray $actualIdentity $lockedIdentityMicro) -or (Test-ByteArray $actualIdentity $flexibleIdentityMicro)
 
     if ($blankIdentity) {
         # Native Rednova USB identity proves the model. For an unprovisioned
@@ -146,8 +163,14 @@ for the first upload, or use BoardFactoryReset to assign the intended model.
         }
 
         $needsIdentityWrite = $true
-    } elseif (-not (Test-ByteArray $actualIdentity $expectedIdentity)) {
-        if ((Test-ByteArray $actualIdentity $identityV2) -or (Test-ByteArray $actualIdentity $identityMicro)) {
+        $identityFileForWrite = if ($usingLegacyBootloader) { $FlexibleIdentityFile } else { $IdentityFile }
+    } elseif ($matchesExpectedLegacy) {
+        # Upgrade version-1 identities. Leonardo Caterina remains reassignable;
+        # a native Rednova bootloader becomes permanently model-locked.
+        $needsIdentityWrite = $true
+        $identityFileForWrite = if ($usingLegacyBootloader) { $FlexibleIdentityFile } else { $IdentityFile }
+    } elseif (-not $matchesExpectedLocked -and -not $matchesExpectedFlexible) {
+        if ($recognizedV2 -or $recognizedMicro) {
             [Console]::Error.WriteLine("Rednova upload blocked: this board is permanently identified as $otherModel, not $ExpectedBoard.")
         } else {
             [Console]::Error.WriteLine("Rednova upload blocked: the EEPROM model identity is invalid. Use the factory ISP recovery procedure.")
@@ -214,13 +237,14 @@ $avrdudeArguments += @(
     "-D"
 )
 if ($needsIdentityWrite) {
-    $avrdudeArguments += "-Ueeprom:w:$($IdentityFile):i"
+    $avrdudeArguments += "-Ueeprom:w:$($identityFileForWrite):i"
 }
 $avrdudeArguments += "-Uflash:w:$($HexFile):i"
 
 & $Avrdude @avrdudeArguments
 $uploadExitCode = $LASTEXITCODE
 if ($uploadExitCode -eq 0 -and $needsIdentityWrite) {
-    [Console]::Error.WriteLine("Rednova model identity initialized as $ExpectedModel. Future uploads are locked to this model.")
+    $policy = if ($usingLegacyBootloader) { "flexible Leonardo" } else { "locked Rednova" }
+    [Console]::Error.WriteLine("Rednova model identity initialized as $ExpectedModel ($policy policy).")
 }
 exit $uploadExitCode
