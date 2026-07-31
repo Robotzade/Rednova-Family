@@ -3,7 +3,7 @@
 // --------------------------------------------------
 // Continuous Buzzer Test
 // --------------------------------------------------
-// This program continuously tests the buzzer on the Rednova V2.1 board.
+// This program continuously tests the buzzer on the Rednova V2 board.
 // The buzzer will sound for 1000ms, then pause for 1000ms, repeating endlessly.
 // --------------------------------------------------
 
@@ -14,11 +14,11 @@ void setup() {
 }
 
 void loop() {
-  // Play buzzer for 1000ms
+  // Play the buzzer for 1000ms
   Rednova.Buzzer(1, 1000); 
   Serial.println("Buzzer is ON for 1000ms");
   
-  // Play buzzer for 1000ms
+  // Stop the buzzer for 1000ms
   Rednova.Buzzer(0, 1000); 
   Serial.println("Buzzer is OFF for 1000ms");
 }

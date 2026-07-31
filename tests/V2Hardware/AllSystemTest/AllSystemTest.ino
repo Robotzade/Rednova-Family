@@ -44,6 +44,8 @@ void loop() {
   // 0000 → TRIMPOT + BUZZER + BUTTON TEST
   // --------------------------------------------------
   if (sw == "0000") {
+    Rednova.DualDirection(0, 0, 0);  // Stop motors in input-test mode
+
     // LED color depending on trimpot value
     if (pot < 500) {
       Rednova.ColorFunction(100, 0, 0);  // Red

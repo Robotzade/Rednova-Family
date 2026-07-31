@@ -109,7 +109,12 @@ int noteDurations[] = { 4, 8, 8, 4, 4, 4, 4, 4 };
 String RednovaReadString;
 
 RednovaClass::RednovaClass()
-    : TrimpotState(0), ButtonState(0), SwitchState("0000") {
+    : TrimpotState(0), ButtonState(0),
+#if defined(REDNOVA_BOARD_MICRO)
+      SwitchState("00") {
+#else
+      SwitchState("0000") {
+#endif
 }
 
 void RednovaClass::SETUP(){
@@ -128,8 +133,10 @@ void RednovaClass::begin() {
     analogWrite(M2_Pwm, 0);
     pinMode(15, INPUT_PULLUP);
     pinMode(16, INPUT_PULLUP);
+#if !defined(REDNOVA_BOARD_MICRO)
     pinMode(17, INPUT_PULLUP);
     pinMode(30, INPUT_PULLUP);
+#endif
     pinMode(14, INPUT_PULLUP);
     pinMode(TRIMPOT_PIN, INPUT);
 }
@@ -145,12 +152,19 @@ void RednovaClass::Buzzer(boolean x , int Time ){
 }
 
 void RednovaClass::ReadSwitch() {
+#if defined(REDNOVA_BOARD_MICRO)
+    char s[3]; // 2 switches + null terminator
+    s[0] = (digitalRead(15) == LOW) ? '1' : '0'; // SW1
+    s[1] = (digitalRead(16) == LOW) ? '1' : '0'; // SW2
+    s[2] = '\0';
+#else
     char s[5]; // 4 karakter + null terminator
     s[0] = (digitalRead(15) == LOW) ? '1' : '0'; // Bit0
     s[1] = (digitalRead(16) == LOW) ? '1' : '0'; // Bit1
     s[2] = (digitalRead(17) == LOW) ? '1' : '0'; // Bit2
     s[3] = (digitalRead(30) == LOW) ? '1' : '0'; // Bit3
     s[4] = '\0';
+#endif
     SwitchState = String(s);
 }
 
@@ -248,19 +262,7 @@ void RednovaClass::ColorFunction(uint8_t r, uint8_t g, uint8_t b) {
     if (r > 100) r = 100;
     if (g > 100) g = 100;
     if (b > 100) b = 100;
-    // --- Son gönderilen renkleri sakla ---
-    static uint8_t last_r = 255;
-    static uint8_t last_g = 255;
-    static uint8_t last_b = 255;
-    // --- Eğer hiç değişiklik yoksa LED'e dokunma ---
-    if (r == last_r && g == last_g && b == last_b) {
-        return;
-    }
-    // --- Hafızayı güncelle ---
-    last_r = r;
-    last_g = g;
-    last_b = b;
-    // --- Yeni rengi gönder ---
+    // Send the requested color.
     noInterrupts();
     sendByte(g); // WS2812 sırası: G, R, B
     sendByte(r);
@@ -286,6 +288,7 @@ void RednovaClass::PlayStartup() {
         sendByte(r);  // R
         sendByte(b);  // B
         interrupts();
+        delayMicroseconds(50);
 
         // Buzzer rise effect on pin 13
         int freq = 200 + brightness * 8; // Start low, go higher
@@ -300,6 +303,7 @@ void RednovaClass::PlayStartup() {
         sendByte(i);      // R
         sendByte(i / 3);  // B
         interrupts();
+        delayMicroseconds(50);
         delay(10);
     }
 
@@ -309,7 +313,8 @@ void RednovaClass::PlayStartup() {
     sendByte(0);
     sendByte(0);
     interrupts();
-delay(100);
+    delayMicroseconds(50);
+    delay(100);
 }
 void RednovaClass::Jump() {
     // --- Define pitches ---
@@ -319,7 +324,8 @@ void RednovaClass::Jump() {
     };
 
     // --- Play each note ---
-    for (int i = 0; i < sizeof(jumpMelody)/sizeof(jumpMelody[0]); i++) {
+    const size_t jumpNoteCount = sizeof(jumpMelody) / sizeof(jumpMelody[0]);
+    for (size_t i = 0; i < jumpNoteCount; i++) {
         tone(13, jumpMelody[i][0], jumpMelody[i][1]);
         delay(jumpMelody[i][1] * 1.3);
         noTone(13);
@@ -354,7 +360,8 @@ void RednovaClass::PlayMario() {
         4, 4, 4, 4
     };
     
-    for (int thisNote = 0; thisNote < sizeof(marioMelody)/sizeof(int); thisNote++) {
+    const size_t marioNoteCount = sizeof(marioMelody) / sizeof(marioMelody[0]);
+    for (size_t thisNote = 0; thisNote < marioNoteCount; thisNote++) {
         int noteDuration = 1000 / marioDurations[thisNote];
         if (marioMelody[thisNote] != 0) {
             tone(BZR, marioMelody[thisNote], noteDuration);
@@ -378,6 +385,7 @@ void RednovaClass::MixLed(){
             if (bz > 190) bz = 190;
             // ----------------------------
             noInterrupts(); sendByte(gbz); sendByte(rz); sendByte(bz); interrupts();
+            delayMicroseconds(50);
             delay(3);
         }
    

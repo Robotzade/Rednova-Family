@@ -3,15 +3,18 @@
 Rednova Family is an independent Robotzade controller platform compatible with
 the Arduino IDE.
 
-## Supported board
+## Supported boards
 
 - Rednova V2
+- Rednova Micro
 
 Rednova V2 uses an ATmega32U4 at 16 MHz and is compatible with the Arduino AVR
 core and Leonardo pin mapping.
 
-Rednova Mega and Rednova Micro will be added after the V2 platform is released
-and their model-specific hardware behavior is validated.
+Rednova Micro uses the same processor, Leonardo pin mapping, motors, buzzer,
+RGB LED, button, and trimpot as V2. Its DIP switch input has two positions:
+SW1 on D15 and SW2 on D16. Rednova Mega will be added after its
+model-specific hardware behavior is validated.
 
 ## Development status
 

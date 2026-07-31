@@ -4,7 +4,7 @@
 // Color Cycle with Jump Effect
 // --------------------------------------------------
 // This program allows you to cycle through a set of predefined LED colors
-// on the Rednova V2.1 board by pressing the button. Each time the button
+// on the Rednova V2 board by pressing the button. Each time the button
 // is pressed, the LED changes to the next color in the list, and the
 // Rednova.Jump() function is called to play a short jump sound effect.
 // --------------------------------------------------
@@ -26,11 +26,11 @@ uint8_t colors[][3] = {
 
 // Variables to track button state and current color
 bool lastButtonState = 0;
-int colorIndex = 0;
+int colorIndex = -1;
 
 void setup() {
   Serial.begin(9600);         // Start serial communication
-  Rednova.begin();       // Initialize Rednova V2.1 board
+  Rednova.begin();       // Initialize Rednova V2 board
   Rednova.PlayStartup(); // Play startup buzzer + LED effect
 }
 
@@ -41,7 +41,7 @@ void loop() {
   if (Rednova.ButtonState == 1 && lastButtonState == 0) {
     // Increment color index to move to the next color
     colorIndex++;
-    if (colorIndex >= sizeof(colors)/sizeof(colors[0])) colorIndex = 0;
+    if (colorIndex >= (int)(sizeof(colors) / sizeof(colors[0]))) colorIndex = 0;
 
     // Set LED to the selected color
     Rednova.ColorFunction(colors[colorIndex][0],

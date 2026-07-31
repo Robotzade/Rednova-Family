@@ -41,7 +41,7 @@ void loop() {
     Rednova.ColorFunction(100, 100, 100); // White  when button pressed
   } else {
     // Normal motor direction LED
-    if(motorReverse) Rednova.ColorFunction(200, 70, 0); // Orange-ish = reverse
+    if(motorReverse) Rednova.ColorFunction(100, 70, 0); // Orange = reverse
     else             Rednova.ColorFunction(0, 70, 0); // Green = forward
   }
 
