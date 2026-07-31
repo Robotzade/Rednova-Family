@@ -1,5 +1,9 @@
 #include <Rednova.h>
 
+#if !defined(REDNOVA_BOARD_MICRO)
+#error "This example requires Tools > Board > Rednova Family > Rednova Micro."
+#endif
+
 // --------------------------------------------------
 // Continuous Mario Melody Test
 // Plays Mario melody repeatedly

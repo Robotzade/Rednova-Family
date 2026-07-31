@@ -1,5 +1,9 @@
 #include <Rednova.h>
 
+#if !defined(REDNOVA_BOARD_MICRO)
+#error "This example requires Tools > Board > Rednova Family > Rednova Micro."
+#endif
+
 // --------------------------------------------------
 // Full RGB LED Test Program
 // Cycles through primary, secondary, and mixed colors
