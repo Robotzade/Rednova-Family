@@ -29,6 +29,10 @@ eight EEPROM bytes and verifies it before every upload. A V2 identity therefore
 cannot be programmed through a Micro selection, even while the running sketch
 uses the shared Leonardo USB identity.
 
+The Old Boot selections use the original Leonardo Caterina bootloader only
+during reset. The uploaded application receives the selected Rednova USB
+identity, so its normal COM port is displayed as Rednova V2 or Rednova Micro.
+
 For an old board without an EEPROM identity, the first upload through the
 correct **Old Boot Leonardo** selection writes and locks the selected model
 identity automatically. This first selection must match the physical product.
