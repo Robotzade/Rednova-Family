@@ -22,10 +22,11 @@ model's application and bootloader USB identities before writing a sketch.
 Each example is also compile-locked to its matching Rednova board selection,
 so a Micro example cannot be built for V2 or a V2 example for Micro.
 
-Boards manufactured with the original Arduino Leonardo bootloader can use the
-matching `Legacy Leonardo Bootloader` V2 or Micro board selection. These
-entries retain the Leonardo USB identity while defining the correct Rednova
-model for the library and examples.
+Boards manufactured with the original Arduino Leonardo bootloader can instead
+be programmed with the standard **Arduino Leonardo** board selection. Both V2
+and Micro examples allow this compatibility mode. Because old boards share the
+same Leonardo USB identity, the IDE cannot automatically distinguish V2 from
+Micro while this mode is selected.
 
 ## Development status
 
@@ -42,9 +43,11 @@ Rednova V2 has passed:
 
 ## Installation
 
-The release package is distributed through Arduino Boards Manager. During
+The board package is distributed through Arduino Boards Manager. During
 development it can also be installed in the Arduino sketchbook `hardware`
-directory.
+directory. To compile Rednova examples while **Arduino Leonardo** is selected,
+the Rednova library must also be installed using its library ZIP (or Arduino
+Library Manager after it is accepted there).
 
 ## Product wording
 

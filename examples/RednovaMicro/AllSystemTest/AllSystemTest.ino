@@ -1,7 +1,7 @@
 #include <Rednova.h>
 
-#if !defined(REDNOVA_BOARD_MICRO)
-#error "This example requires Tools > Board > Rednova Family > Rednova Micro."
+#if !defined(REDNOVA_BOARD_MICRO) && !defined(ARDUINO_AVR_LEONARDO)
+#error "This example requires Rednova Micro or Arduino Leonardo board selection."
 #endif
 
 // Rednova Micro complete hardware test
