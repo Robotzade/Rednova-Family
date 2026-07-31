@@ -5,7 +5,6 @@ param(
     [Parameter(Mandatory = $true)][string]$ExpectedBootPid,
     [Parameter(Mandatory = $true)][string]$ExpectedBoard,
     [Parameter(Mandatory = $true)][ValidateSet("V2", "MICRO")][string]$ExpectedModel,
-    [Parameter(Mandatory = $true)][ValidateSet("true", "false")][string]$OldBootMode,
     [Parameter(Mandatory = $true)][string]$IdentityFile,
     [Parameter(Mandatory = $true)][string]$Port,
     [Parameter(Mandatory = $true)][string]$Avrdude,
@@ -23,7 +22,6 @@ $UploadVerbose = $UploadVerbose.Substring(1)
 $UploadVerify = $UploadVerify.Substring(1)
 $expectedAppHardwareId = "VID_$($ExpectedVid.ToUpperInvariant())&PID_$($ExpectedAppPid.ToUpperInvariant())"
 $expectedBootHardwareId = "VID_$($ExpectedBootVid.ToUpperInvariant())&PID_$($ExpectedBootPid.ToUpperInvariant())"
-$isOldBootSelection = $OldBootMode -eq "true"
 $legacyAppHardwareIds = @("VID_2341&PID_8036", "VID_2A03&PID_8036")
 $legacyBootHardwareIds = @("VID_2341&PID_0036", "VID_2A03&PID_0036")
 $identityOffset = 1016
@@ -137,12 +135,12 @@ try {
         # Leonardo-era board, the explicitly selected Old Boot entry performs
         # the one-time model claim. Every later upload must match this identity.
         $canProvisionFromNativeIdentity = ($ExpectedVid -eq "1209") -and $isRednovaApplication
-        $canProvisionFromOldBootSelection = $isOldBootSelection -and $isLegacyApplication
-        if (-not $canProvisionFromNativeIdentity -and -not $canProvisionFromOldBootSelection) {
+        $canProvisionFromLeonardoIdentity = $isLegacyApplication
+        if (-not $canProvisionFromNativeIdentity -and -not $canProvisionFromLeonardoIdentity) {
             [Console]::Error.WriteLine(@"
 Rednova upload blocked: this board has no permanent model identity and cannot
-be safely identified from the selected port. Use the correct Old Boot Leonardo
-model selection for the first upload, or use Burn Bootloader with Arduino as ISP.
+be safely identified from the selected port. Select Rednova V2 or Rednova Micro
+for the first upload, or use BoardFactoryReset to assign the intended model.
 "@)
             exit 25
         }

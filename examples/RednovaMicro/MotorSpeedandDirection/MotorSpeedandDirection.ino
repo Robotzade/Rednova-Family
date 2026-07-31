@@ -1,7 +1,7 @@
 #include <Rednova.h>
 
 #if !defined(REDNOVA_BOARD_MICRO)
-#error "This example requires a Rednova Micro board selection, including its Old Boot Leonardo option."
+#error "This example requires the Rednova Micro board selection."
 #endif
 
 // --------------------------------------------------
