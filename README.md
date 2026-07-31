@@ -29,10 +29,12 @@ eight EEPROM bytes and verifies it before every upload. A V2 identity therefore
 cannot be programmed through a Micro selection, even while the running sketch
 uses the shared Leonardo USB identity.
 
-Old boards without an EEPROM identity must be provisioned once with Arduino as
-ISP: select the physical model's **Old Boot Leonardo** entry and run **Burn
-Bootloader**. This writes the original Caterina bootloader and the matching
-model identity. Normal sketch uploads preserve this identity.
+For an old board without an EEPROM identity, the first upload through the
+correct **Old Boot Leonardo** selection writes and locks the selected model
+identity automatically. This first selection must match the physical product.
+Factory provisioning can alternatively use Arduino as ISP and **Burn
+Bootloader**, which writes both Caterina and the matching identity. Normal
+sketch uploads preserve the identity.
 
 ## Development status
 

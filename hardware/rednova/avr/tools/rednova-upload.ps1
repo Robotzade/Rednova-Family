@@ -129,14 +129,16 @@ try {
     $blankIdentity = Test-ByteArray $actualIdentity ([byte[]](0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF))
 
     if ($blankIdentity) {
-        # A native Rednova application VID/PID safely proves the model for
-        # upgrading cards manufactured before EEPROM identities were added.
+        # Native Rednova USB identity proves the model. For an unprovisioned
+        # Leonardo-era board, the explicitly selected Old Boot entry performs
+        # the one-time model claim. Every later upload must match this identity.
         $canProvisionFromNativeIdentity = ($ExpectedVid -eq "1209") -and $isRednovaApplication
-        if (-not $canProvisionFromNativeIdentity) {
+        $canProvisionFromOldBootSelection = ($ExpectedVid -eq "2341") -and $isLegacyApplication
+        if (-not $canProvisionFromNativeIdentity -and -not $canProvisionFromOldBootSelection) {
             [Console]::Error.WriteLine(@"
-Rednova upload blocked: this old-boot card has no permanent model identity.
-Select the physical model's Old Boot Leonardo entry and use Burn Bootloader
-with Arduino as ISP once. This writes both Caterina and the protected model ID.
+Rednova upload blocked: this board has no permanent model identity and cannot
+be safely identified from the selected port. Use the correct Old Boot Leonardo
+model selection for the first upload, or use Burn Bootloader with Arduino as ISP.
 "@)
             exit 25
         }
@@ -146,6 +148,7 @@ with Arduino as ISP once. This writes both Caterina and the protected model ID.
             [Console]::Error.WriteLine("Rednova upload blocked: model identity initialization failed.")
             exit 26
         }
+        [Console]::Error.WriteLine("Rednova model identity initialized as $ExpectedModel. Future uploads are locked to this model.")
     } elseif (-not (Test-ByteArray $actualIdentity $expectedIdentity)) {
         if ((Test-ByteArray $actualIdentity $identityV2) -or (Test-ByteArray $actualIdentity $identityMicro)) {
             [Console]::Error.WriteLine("Rednova upload blocked: this board is permanently identified as $otherModel, not $ExpectedBoard.")
