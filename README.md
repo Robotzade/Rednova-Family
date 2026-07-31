@@ -36,6 +36,11 @@ Factory provisioning can alternatively use Arduino as ISP and **Burn
 Bootloader**, which writes both Caterina and the matching identity. Normal
 sketch uploads preserve the identity.
 
+The `BoardFactoryReset` example group contains separate V2 and Micro identity
+writers for authorized factory/service reassignment. These sketches are
+uploaded with the standard **Arduino Leonardo** selection, write and verify the
+permanent EEPROM identity, and intentionally override the previous model lock.
+
 ## Development status
 
 Rednova V2 has passed:
