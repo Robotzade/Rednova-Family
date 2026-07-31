@@ -39,7 +39,10 @@ writers for Leonardo-era controllers. EEPROM identities now include a policy:
 original Leonardo bootloaders receive a flexible identity that these tools may
 change, while ICSP-installed Rednova bootloaders receive a locked identity that
 cannot be converted to the other model. Version-1 identities are migrated by
-the uploader according to the bootloader USB identity it observes.
+the uploader according to the bootloader USB identity it observes. The detected
+bootloader PID is authoritative: native V2/Micro bootloaders repair EEPROM to
+their locked model, while Leonardo Caterina repairs a matching stale lock to
+the flexible policy.
 
 ## Development status
 

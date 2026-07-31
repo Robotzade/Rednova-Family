@@ -118,6 +118,7 @@ if ($isApplication) {
     $bootDevice = $serialDevice
 }
 $usingLegacyBootloader = Test-HardwareId $bootDevice.PNPDeviceID $legacyBootHardwareIds
+$usingExpectedRednovaBootloader = $bootDevice.PNPDeviceID -match [regex]::Escape($expectedBootHardwareId)
 
 # The USB product string belongs to the currently running sketch and can be
 # changed by an Arduino Leonardo upload. The EEPROM identity is independent of
@@ -147,7 +148,15 @@ try {
     $recognizedV2 = (Test-ByteArray $actualIdentity $legacyIdentityV2) -or (Test-ByteArray $actualIdentity $lockedIdentityV2) -or (Test-ByteArray $actualIdentity $flexibleIdentityV2)
     $recognizedMicro = (Test-ByteArray $actualIdentity $legacyIdentityMicro) -or (Test-ByteArray $actualIdentity $lockedIdentityMicro) -or (Test-ByteArray $actualIdentity $flexibleIdentityMicro)
 
-    if ($blankIdentity) {
+    if ($usingExpectedRednovaBootloader) {
+        # A model-specific Rednova bootloader PID is the strongest model
+        # identity. Repair blank, legacy, flexible, fragmented, or otherwise
+        # invalid EEPROM metadata to the matching permanent locked identity.
+        if (-not $matchesExpectedLocked) {
+            $needsIdentityWrite = $true
+            $identityFileForWrite = $IdentityFile
+        }
+    } elseif ($blankIdentity) {
         # Native Rednova USB identity proves the model. For an unprovisioned
         # Leonardo-era board, the explicitly selected Old Boot entry performs
         # the one-time model claim. Every later upload must match this identity.
@@ -169,6 +178,17 @@ for the first upload, or use BoardFactoryReset to assign the intended model.
         # a native Rednova bootloader becomes permanently model-locked.
         $needsIdentityWrite = $true
         $identityFileForWrite = if ($usingLegacyBootloader) { $FlexibleIdentityFile } else { $IdentityFile }
+    } elseif ($matchesExpectedLocked -and $usingLegacyBootloader) {
+        # The installed bootloader is the source of truth. A Leonardo
+        # Caterina board is reassignable even if an older test or installation
+        # left a locked policy byte behind.
+        $needsIdentityWrite = $true
+        $identityFileForWrite = $FlexibleIdentityFile
+    } elseif ($matchesExpectedFlexible -and -not $usingLegacyBootloader) {
+        # A native model-specific Rednova bootloader always upgrades the
+        # matching identity to the permanent locked policy.
+        $needsIdentityWrite = $true
+        $identityFileForWrite = $IdentityFile
     } elseif (-not $matchesExpectedLocked -and -not $matchesExpectedFlexible) {
         if ($recognizedV2 -or $recognizedMicro) {
             [Console]::Error.WriteLine("Rednova upload blocked: this board is permanently identified as $otherModel, not $ExpectedBoard.")
