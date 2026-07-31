@@ -26,7 +26,10 @@ Boards manufactured with the original Arduino Leonardo bootloader can instead
 be programmed with the standard **Arduino Leonardo** board selection. Both V2
 and Micro examples allow this compatibility mode. Because old boards share the
 same Leonardo USB identity, the IDE cannot automatically distinguish V2 from
-Micro while this mode is selected.
+Micro while this mode is selected. The Rednova uploader also accepts the
+original Leonardo application and bootloader identities as a recovery path, so
+selecting V2 or Micro restores the chosen Rednova application identity without
+requiring the bootloader to be burned again.
 
 ## Development status
 
