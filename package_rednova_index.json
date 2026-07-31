@@ -10,26 +10,20 @@
       },
       "platforms": [
         {
-          "name": "Rednova AVR Boards",
+          "name": "Rednova Family",
           "architecture": "avr",
-          "version": "1.0.4",
+          "version": "2.0.0",
           "category": "Contributed",
-          "url": "https://github.com/robotzade/Rednova-Family/releases/download/v1.0.4/rednova-avr-1.0.4.zip",
-          "archiveFileName": "rednova-avr-1.0.4.zip",
-          "checksum": "SHA-256:53b535630096eb34f001e977d110065f1e391f7ecc1600b34a539ba865b7434c",
-          "size": "8512680",
+          "url": "https://github.com/robotzade/Rednova-Family/releases/download/v2.0.0/rednova-family-avr-2.0.0.zip",
+          "archiveFileName": "rednova-family-avr-2.0.0.zip",
+          "checksum": "SHA-256:dee7a6acbb09d2a5772c3f6c56ce3daee224406b6dc501ef0578598e37738453",
+          "size": "119746",
           "help": {
             "online": "https://www.robotzade.com/"
           },
           "boards": [
             {
               "name": "Rednova V2"
-            },
-            {
-              "name": "Rednova Mega"
-            },
-            {
-              "name": "Rednova Micro"
             }
           ],
           "toolsDependencies": [
