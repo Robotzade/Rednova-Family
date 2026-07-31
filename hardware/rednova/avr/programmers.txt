@@ -1,0 +1,9 @@
+rednova_arduinoasisp.name=Arduino as ISP (Rednova Family)
+rednova_arduinoasisp.communication=serial
+rednova_arduinoasisp.protocol=stk500v1
+rednova_arduinoasisp.speed=19200
+rednova_arduinoasisp.program.protocol=stk500v1
+rednova_arduinoasisp.program.speed=19200
+rednova_arduinoasisp.program.tool=avrdude
+rednova_arduinoasisp.program.tool.default=avrdude
+rednova_arduinoasisp.program.extra_params=-P{serial.port} -b{program.speed}

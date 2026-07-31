@@ -12,12 +12,12 @@
         {
           "name": "Rednova Family",
           "architecture": "avr",
-          "version": "2.0.0",
+          "version": "2.0.1",
           "category": "Contributed",
-          "url": "https://github.com/robotzade/Rednova-Family/releases/download/v2.0.0/rednova-family-avr-2.0.0.zip",
-          "archiveFileName": "rednova-family-avr-2.0.0.zip",
-          "checksum": "SHA-256:dee7a6acbb09d2a5772c3f6c56ce3daee224406b6dc501ef0578598e37738453",
-          "size": "119746",
+          "url": "https://github.com/robotzade/Rednova-Family/releases/download/v2.0.1/rednova-family-avr-2.0.1.zip",
+          "archiveFileName": "rednova-family-avr-2.0.1.zip",
+          "checksum": "SHA-256:9b1c601f0116696b974e16b57624450bd35997c578131aeb3234655cf35ec019",
+          "size": "167411",
           "help": {
             "online": "https://www.robotzade.com/"
           },
