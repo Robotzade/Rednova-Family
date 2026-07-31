@@ -37,3 +37,41 @@ rednova_v2.upload_port.0.vid=0x1209
 rednova_v2.upload_port.0.pid=0x0001
 rednova_v2.upload_port.1.vid=0x1209
 rednova_v2.upload_port.1.pid=0x0002
+
+##############################################################
+# Rednova Micro
+# Two DIP switches: SW1=D15, SW2=D16
+##############################################################
+
+rednova_micro.name=Rednova Micro
+rednova_micro.upload.tool=avrdude
+rednova_micro.upload.tool.default=avrdude
+rednova_micro.upload.protocol=avr109
+rednova_micro.upload.maximum_size=28672
+rednova_micro.upload.maximum_data_size=2560
+rednova_micro.upload.speed=57600
+rednova_micro.upload.disable_flushing=true
+rednova_micro.upload.use_1200bps_touch=true
+rednova_micro.upload.wait_for_upload_port=true
+rednova_micro.bootloader.tool=avrdude
+rednova_micro.bootloader.tool.default=avrdude
+rednova_micro.bootloader.tool.serial=avrdude
+rednova_micro.bootloader.low_fuses=0xff
+rednova_micro.bootloader.high_fuses=0xd8
+rednova_micro.bootloader.extended_fuses=0xcb
+rednova_micro.bootloader.file=caterina/Caterina-RednovaMicro.hex
+rednova_micro.bootloader.unlock_bits=0x3F
+rednova_micro.bootloader.lock_bits=0x2F
+rednova_micro.build.mcu=atmega32u4
+rednova_micro.build.f_cpu=16000000L
+rednova_micro.build.vid=0x1209
+rednova_micro.build.pid=0x0004
+rednova_micro.build.usb_product="Rednova Micro"
+rednova_micro.build.board=REDNOVA_MICRO
+rednova_micro.build.core=arduino:arduino
+rednova_micro.build.variant=arduino:leonardo
+rednova_micro.build.extra_flags={build.usb_flags} -DREDNOVA_BOARD_MICRO=1
+rednova_micro.upload_port.0.vid=0x1209
+rednova_micro.upload_port.0.pid=0x0003
+rednova_micro.upload_port.1.vid=0x1209
+rednova_micro.upload_port.1.pid=0x0004

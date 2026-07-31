@@ -42,16 +42,18 @@ void setup() {
 }
 
 void loop() {
-  int sensorValues[sensorsCount];
   long positionSum = 0;
   int activeCount = 0;
 
   // Read calibrated sensor values
   for (int i = 0; i < sensorsCount; i++) {
     int val = analogRead(sensorPins[i]);
-    val = constrain(val, sensorMin[i], sensorMax[i]);
-    val = map(val, sensorMin[i], sensorMax[i], 0, 1000);  // normalize
-    sensorValues[i] = val;
+    if (sensorMax[i] > sensorMin[i]) {
+      val = constrain(val, sensorMin[i], sensorMax[i]);
+      val = map(val, sensorMin[i], sensorMax[i], 0, 1000);
+    } else {
+      val = 0;
+    }
     int detected = val > 500 ? 1 : 0;  // white line detected
     positionSum += detected * i * 100;
     activeCount += detected;
@@ -74,8 +76,8 @@ void loop() {
   int rightSpeed = baseSpeed + turn;
 
   // Limit speed
-  leftSpeed = constrain(leftSpeed, -120, 120);
-  rightSpeed = constrain(rightSpeed, -120, 120);
+  leftSpeed = constrain(leftSpeed, -100, 100);
+  rightSpeed = constrain(rightSpeed, -100, 100);
 
   Rednova.DualDirection(leftSpeed, rightSpeed, 1);
 
