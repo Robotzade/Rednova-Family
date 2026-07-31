@@ -43,9 +43,10 @@ be obtained and registered for Robotzade before commercial distribution.
 3. [x] USB serial communication works for Rednova V2.
 4. [x] Rednova V2 has matching bootloader and sketch USB identities.
 5. [x] Sketch upload works after the 1200-baud reset sequence.
-6. The shared Rednova library selects model-specific behavior at compile time.
-7. Examples compile for all supported models.
-8. The signed release package installs through Boards Manager.
+6. [x] Rednova V2 bootloader can be burned from the public Rednova Family platform.
+7. The shared Rednova library selects model-specific behavior at compile time.
+8. Examples compile for all supported models.
+9. The signed release package installs through Boards Manager.
 
 ## V2 bring-up result
 

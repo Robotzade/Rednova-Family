@@ -39,7 +39,9 @@ directory.
 Rednova and Robotzade are independent brands. Arduino trademarks and logos are
 not part of the Rednova product name or identity.
 
-## Private manufacturing files
+## Bootloader
 
-Model-specific factory bootloader files and manufacturing tools are excluded
-from the public repository and release archives.
+The Rednova V2 Caterina bootloader, its Arduino source files, and the
+reproducible patch tool are included in the public repository and release
+archive. The same **Rednova V2** board selection can be used for normal sketch
+uploads and for **Burn Bootloader** with **Arduino as ISP (Rednova Family)**.
