@@ -44,6 +44,10 @@ bootloader PID is authoritative: native V2/Micro bootloaders repair EEPROM to
 their locked model, while Leonardo Caterina repairs a matching stale lock to
 the flexible policy.
 
+Factory Set examples also inspect the installed bootloader image directly.
+Only an original Leonardo bootloader can change models; an ICSP-installed
+Rednova V2 or Micro bootloader remains locked even if EEPROM is modified.
+
 ## Development status
 
 Rednova V2 has passed:
