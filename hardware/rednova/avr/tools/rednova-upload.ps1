@@ -112,6 +112,7 @@ if ($isApplication) {
 # changed by an Arduino Leonardo upload. The EEPROM identity is independent of
 # that sketch, so it is the authoritative physical-model lock.
 $eepromDump = Join-Path ([System.IO.Path]::GetTempPath()) ("rednova-eeprom-" + [guid]::NewGuid().ToString("N") + ".bin")
+$needsIdentityWrite = $false
 try {
     & $Avrdude "-C$Config" "-p$Mcu" "-c$Protocol" "-P$uploadPort" "-b$Speed" "-Ueeprom:r:$($eepromDump):r"
     if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $eepromDump)) {
@@ -143,12 +144,7 @@ model selection for the first upload, or use Burn Bootloader with Arduino as ISP
             exit 25
         }
 
-        & $Avrdude "-C$Config" "-p$Mcu" "-c$Protocol" "-P$uploadPort" "-b$Speed" "-Ueeprom:w:$($IdentityFile):i"
-        if ($LASTEXITCODE -ne 0) {
-            [Console]::Error.WriteLine("Rednova upload blocked: model identity initialization failed.")
-            exit 26
-        }
-        [Console]::Error.WriteLine("Rednova model identity initialized as $ExpectedModel. Future uploads are locked to this model.")
+        $needsIdentityWrite = $true
     } elseif (-not (Test-ByteArray $actualIdentity $expectedIdentity)) {
         if ((Test-ByteArray $actualIdentity $identityV2) -or (Test-ByteArray $actualIdentity $identityMicro)) {
             [Console]::Error.WriteLine("Rednova upload blocked: this board is permanently identified as $otherModel, not $ExpectedBoard.")
@@ -214,9 +210,16 @@ $avrdudeArguments += @(
     "-c$Protocol",
     "-P$uploadPort",
     "-b$Speed",
-    "-D",
-    "-Uflash:w:$($HexFile):i"
+    "-D"
 )
+if ($needsIdentityWrite) {
+    $avrdudeArguments += "-Ueeprom:w:$($IdentityFile):i"
+}
+$avrdudeArguments += "-Uflash:w:$($HexFile):i"
 
 & $Avrdude @avrdudeArguments
-exit $LASTEXITCODE
+$uploadExitCode = $LASTEXITCODE
+if ($uploadExitCode -eq 0 -and $needsIdentityWrite) {
+    [Console]::Error.WriteLine("Rednova model identity initialized as $ExpectedModel. Future uploads are locked to this model.")
+}
+exit $uploadExitCode
