@@ -1,7 +1,7 @@
 #include <Rednova.h>
 
 #if !defined(REDNOVA_BOARD_V2)
-#error "This example requires a Rednova V2 board selection, including its Old Boot Leonardo option."
+#error "This example requires the Rednova V2 board selection."
 #endif
 
 /* 

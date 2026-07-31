@@ -22,22 +22,16 @@ model's application and bootloader USB identities before writing a sketch.
 Each example is also compile-locked to its matching Rednova board selection,
 so a Micro example cannot be built for V2 or a V2 example for Micro.
 
-Boards manufactured with the original Arduino Leonardo bootloader use the
-model-specific **Rednova V2 (Old Boot Leonardo)** or **Rednova Micro (Old Boot
-Leonardo)** selection. Rednova stores a permanent model identity in the final
-eight EEPROM bytes and verifies it before every upload. A V2 identity therefore
-cannot be programmed through a Micro selection, even while the running sketch
-uses the shared Leonardo USB identity.
-
-The Old Boot selections use the original Leonardo Caterina bootloader only
-during reset. The uploaded application receives the selected Rednova USB
-identity, so its normal COM port is displayed as Rednova V2 or Rednova Micro.
+The normal **Rednova V2** and **Rednova Micro** selections support both current
+Rednova bootloaders and original Arduino Leonardo Caterina bootloaders. Rednova
+stores a permanent model identity in the final eight EEPROM bytes and verifies
+it before every upload. An identity-free Leonardo-era board claims the selected
+model during its first Rednova upload. The uploaded application receives that
+Rednova USB identity, so its normal COM port is displayed as V2 or Micro.
 
 For an old board without an EEPROM identity, the first upload through the
-correct **Old Boot Leonardo** selection writes and locks the selected model
-identity automatically. This first selection must match the physical product.
-Factory provisioning can alternatively use Arduino as ISP and **Burn
-Bootloader**, which writes both Caterina and the matching identity. Normal
+correct Rednova model selection writes and locks the selected identity
+automatically. This first selection must match the physical product. Normal
 sketch uploads preserve the identity.
 
 The `BoardFactoryReset` example group contains separate V2 and Micro identity
