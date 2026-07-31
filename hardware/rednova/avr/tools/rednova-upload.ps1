@@ -19,6 +19,17 @@ $UploadVerbose = $UploadVerbose.Substring(1)
 $UploadVerify = $UploadVerify.Substring(1)
 $expectedAppHardwareId = "VID_$($ExpectedVid.ToUpperInvariant())&PID_$($ExpectedAppPid.ToUpperInvariant())"
 $expectedBootHardwareId = "VID_$($ExpectedVid.ToUpperInvariant())&PID_$($ExpectedBootPid.ToUpperInvariant())"
+$legacyAppHardwareIds = @("VID_2341&PID_8036", "VID_2A03&PID_8036")
+$legacyBootHardwareIds = @("VID_2341&PID_0036", "VID_2A03&PID_0036")
+
+function Test-HardwareId([string]$PnpDeviceId, [string[]]$HardwareIds) {
+    foreach ($hardwareId in $HardwareIds) {
+        if ($PnpDeviceId -match [regex]::Escape($hardwareId)) {
+            return $true
+        }
+    }
+    return $false
+}
 
 function Get-SerialDevice([string]$DeviceId) {
     return Get-CimInstance Win32_SerialPort |
@@ -32,14 +43,19 @@ if ($null -eq $serialDevice) {
     exit 20
 }
 
-$isApplication = $serialDevice.PNPDeviceID -match [regex]::Escape($expectedAppHardwareId)
-$isBootloader = $serialDevice.PNPDeviceID -match [regex]::Escape($expectedBootHardwareId)
+$isRednovaApplication = $serialDevice.PNPDeviceID -match [regex]::Escape($expectedAppHardwareId)
+$isRednovaBootloader = $serialDevice.PNPDeviceID -match [regex]::Escape($expectedBootHardwareId)
+$isLegacyApplication = Test-HardwareId $serialDevice.PNPDeviceID $legacyAppHardwareIds
+$isLegacyBootloader = Test-HardwareId $serialDevice.PNPDeviceID $legacyBootHardwareIds
+$isApplication = $isRednovaApplication -or $isLegacyApplication
+$isBootloader = $isRednovaBootloader -or $isLegacyBootloader
 
 if (-not $isApplication -and -not $isBootloader) {
     [Console]::Error.WriteLine(@"
 Rednova upload blocked: wrong board selected.
 Selected board : $ExpectedBoard
 Expected USB   : $expectedAppHardwareId or $expectedBootHardwareId
+Legacy USB     : Leonardo VID_2341/VID_2A03, PID_8036/PID_0036
 Connected USB  : $($serialDevice.PNPDeviceID)
 Select the physical Rednova model connected to $Port and try again.
 "@)
@@ -63,12 +79,15 @@ if ($isApplication) {
     for ($attempt = 0; $attempt -lt 40 -and $null -eq $bootDevice; $attempt++) {
         Start-Sleep -Milliseconds 250
         $bootDevice = Get-CimInstance Win32_SerialPort |
-            Where-Object { $_.PNPDeviceID -match [regex]::Escape($expectedBootHardwareId) } |
+            Where-Object {
+                ($_.PNPDeviceID -match [regex]::Escape($expectedBootHardwareId)) -or
+                (Test-HardwareId $_.PNPDeviceID $legacyBootHardwareIds)
+            } |
             Select-Object -First 1
     }
 
     if ($null -eq $bootDevice) {
-        [Console]::Error.WriteLine("Rednova upload blocked: $ExpectedBoard bootloader port ($expectedBootHardwareId) was not found.")
+        [Console]::Error.WriteLine("Rednova upload blocked: $ExpectedBoard or legacy Leonardo bootloader port was not found.")
         exit 23
     }
     $uploadPort = $bootDevice.DeviceID
