@@ -1,7 +1,7 @@
 #include <Rednova.h>
 
-#if !defined(REDNOVA_BOARD_V2) && !defined(ARDUINO_AVR_LEONARDO)
-#error "This example requires Rednova V2 or Arduino Leonardo board selection."
+#if !defined(REDNOVA_BOARD_V2)
+#error "This example requires a Rednova V2 board selection, including its Old Boot Leonardo option."
 #endif
 
 // --------------------------------------------------

@@ -22,14 +22,17 @@ model's application and bootloader USB identities before writing a sketch.
 Each example is also compile-locked to its matching Rednova board selection,
 so a Micro example cannot be built for V2 or a V2 example for Micro.
 
-Boards manufactured with the original Arduino Leonardo bootloader can instead
-be programmed with the standard **Arduino Leonardo** board selection. Both V2
-and Micro examples allow this compatibility mode. Because old boards share the
-same Leonardo USB identity, the IDE cannot automatically distinguish V2 from
-Micro while this mode is selected. The Rednova uploader also accepts the
-original Leonardo application and bootloader identities as a recovery path, so
-selecting V2 or Micro restores the chosen Rednova application identity without
-requiring the bootloader to be burned again.
+Boards manufactured with the original Arduino Leonardo bootloader use the
+model-specific **Rednova V2 (Old Boot Leonardo)** or **Rednova Micro (Old Boot
+Leonardo)** selection. Rednova stores a permanent model identity in the final
+eight EEPROM bytes and verifies it before every upload. A V2 identity therefore
+cannot be programmed through a Micro selection, even while the running sketch
+uses the shared Leonardo USB identity.
+
+Old boards without an EEPROM identity must be provisioned once with Arduino as
+ISP: select the physical model's **Old Boot Leonardo** entry and run **Burn
+Bootloader**. This writes the original Caterina bootloader and the matching
+model identity. Normal sketch uploads preserve this identity.
 
 ## Development status
 
@@ -48,9 +51,8 @@ Rednova V2 has passed:
 
 The board package is distributed through Arduino Boards Manager. During
 development it can also be installed in the Arduino sketchbook `hardware`
-directory. To compile Rednova examples while **Arduino Leonardo** is selected,
-the Rednova library must also be installed using its library ZIP (or Arduino
-Library Manager after it is accepted there).
+directory. The standalone Rednova library ZIP remains available for projects
+that use the API outside the bundled board examples.
 
 ## Product wording
 
