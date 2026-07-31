@@ -89,4 +89,3 @@ rednova_micro.upload_port.0.vid=0x1209
 rednova_micro.upload_port.0.pid=0x0003
 rednova_micro.upload_port.1.vid=0x1209
 rednova_micro.upload_port.1.pid=0x0004
-
