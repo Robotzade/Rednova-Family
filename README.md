@@ -16,6 +16,10 @@ RGB LED, button, and trimpot as V2. Its DIP switch input has two positions:
 SW1 on D15 and SW2 on D16. Rednova Mega will be added after its
 model-specific hardware behavior is validated.
 
+The bundled examples are organized into separate `RednovaV2` and
+`RednovaMicro` groups. The Windows uploader validates the selected Rednova
+model's application and bootloader USB identities before writing a sketch.
+
 ## Development status
 
 Rednova V2 has passed:

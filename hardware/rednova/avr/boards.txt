@@ -6,15 +6,18 @@
 ##############################################################
 
 rednova_v2.name=Rednova V2
-rednova_v2.upload.tool=avrdude
-rednova_v2.upload.tool.default=avrdude
+rednova_v2.upload.tool=rednova_avrdude
+rednova_v2.upload.tool.default=rednova_avrdude
+rednova_v2.upload.expected_app_pid=0002
+rednova_v2.upload.expected_boot_pid=0001
+rednova_v2.upload.expected_board=Rednova V2
 rednova_v2.upload.protocol=avr109
 rednova_v2.upload.maximum_size=28672
 rednova_v2.upload.maximum_data_size=2560
 rednova_v2.upload.speed=57600
 rednova_v2.upload.disable_flushing=true
-rednova_v2.upload.use_1200bps_touch=true
-rednova_v2.upload.wait_for_upload_port=true
+rednova_v2.upload.use_1200bps_touch=false
+rednova_v2.upload.wait_for_upload_port=false
 rednova_v2.bootloader.tool=avrdude
 rednova_v2.bootloader.tool.default=avrdude
 rednova_v2.bootloader.tool.serial=avrdude
@@ -44,15 +47,18 @@ rednova_v2.upload_port.1.pid=0x0002
 ##############################################################
 
 rednova_micro.name=Rednova Micro
-rednova_micro.upload.tool=avrdude
-rednova_micro.upload.tool.default=avrdude
+rednova_micro.upload.tool=rednova_avrdude
+rednova_micro.upload.tool.default=rednova_avrdude
+rednova_micro.upload.expected_app_pid=0004
+rednova_micro.upload.expected_boot_pid=0003
+rednova_micro.upload.expected_board=Rednova Micro
 rednova_micro.upload.protocol=avr109
 rednova_micro.upload.maximum_size=28672
 rednova_micro.upload.maximum_data_size=2560
 rednova_micro.upload.speed=57600
 rednova_micro.upload.disable_flushing=true
-rednova_micro.upload.use_1200bps_touch=true
-rednova_micro.upload.wait_for_upload_port=true
+rednova_micro.upload.use_1200bps_touch=false
+rednova_micro.upload.wait_for_upload_port=false
 rednova_micro.bootloader.tool=avrdude
 rednova_micro.bootloader.tool.default=avrdude
 rednova_micro.bootloader.tool.serial=avrdude
