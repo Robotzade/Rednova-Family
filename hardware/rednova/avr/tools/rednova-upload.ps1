@@ -1,4 +1,5 @@
 param(
+    [Parameter(Mandatory = $true)][string]$ExpectedVid,
     [Parameter(Mandatory = $true)][string]$ExpectedAppPid,
     [Parameter(Mandatory = $true)][string]$ExpectedBootPid,
     [Parameter(Mandatory = $true)][string]$ExpectedBoard,
@@ -16,8 +17,8 @@ param(
 $ErrorActionPreference = "Stop"
 $UploadVerbose = $UploadVerbose.Substring(1)
 $UploadVerify = $UploadVerify.Substring(1)
-$expectedAppHardwareId = "VID_1209&PID_$($ExpectedAppPid.ToUpperInvariant())"
-$expectedBootHardwareId = "VID_1209&PID_$($ExpectedBootPid.ToUpperInvariant())"
+$expectedAppHardwareId = "VID_$($ExpectedVid.ToUpperInvariant())&PID_$($ExpectedAppPid.ToUpperInvariant())"
+$expectedBootHardwareId = "VID_$($ExpectedVid.ToUpperInvariant())&PID_$($ExpectedBootPid.ToUpperInvariant())"
 
 function Get-SerialDevice([string]$DeviceId) {
     return Get-CimInstance Win32_SerialPort |
